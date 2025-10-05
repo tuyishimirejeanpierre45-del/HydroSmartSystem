@@ -1,0 +1,48 @@
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+int sensorpin = A0;
+int relaypin = 7;   
+int threshold=700;
+
+void setup() {  
+  pinMode(sensorpin,INPUT);
+  pinMode(relaypin,OUTPUT);
+  digitalWrite(relaypin,HIGH);
+  
+
+  lcd.init();
+  lcd.backlight();
+  lcd.setCursor(0,0);
+  lcd.print("HydroSmartSystem");
+  delay(5000);
+lcd.clear();
+}
+
+void loop() {
+int sensorvalue=analogRead(sensorpin);
+
+if(sensorvalue<threshold){
+  digitalWrite(relaypin,HIGH);
+  lcd.setCursor(0,0);
+  lcd.print("Moisture:");
+  lcd.print(sensorvalue);
+  lcd.print("mm  ");
+  lcd.setCursor(1,1);
+  lcd.print("soil is wet");
+  delay(2000);
+
+}else{
+  digitalWrite(relaypin,LOW);
+  lcd.setCursor(0,0);
+  lcd.print("Dryness:");
+  lcd.print(sensorvalue);
+  lcd.print("mm   ");
+  lcd.setCursor(1,1);
+  lcd.print("soil is dry");
+  delay(2000);
+}
+}
+ 
